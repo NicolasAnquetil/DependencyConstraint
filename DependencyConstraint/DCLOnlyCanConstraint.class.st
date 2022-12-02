@@ -20,10 +20,10 @@ DCLOnlyCanConstraint >> computeResult [
 	classGroupA := self collectEntitiesForModule: moduleDefinitionA.
 	classGroupB := self collectEntitiesForModule: moduleDefinitionB.
 	
-	notClassGroupA := FAMIXClassGroup new.
-	notClassGroupA addAllWithoutUpdate: ( self model allModelScopingEntities flatCollect: #allClasses ).
-	notClassGroupA addAllWithoutUpdate: ( notClassGroupA allClasses flatCollect: #allRecursiveTypes ).
-	notClassGroupA removeAllWithoutUpdate: classGroupA allClasses.
+	notClassGroupA := FamixClassGroup new.
+	notClassGroupA addAll: (self model allClasses reject: #isStub).
+	notClassGroupA addAll: (notClassGroupA allClasses flatCollect: #allRecursiveTypes ).
+	notClassGroupA removeAll: classGroupA allClasses.
 	
 	^ notClassGroupA queryOutgoingDependencies: classGroupB byType: dependencyType
 ]

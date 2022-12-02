@@ -1,37 +1,31 @@
 Class {
 	#name : #DCLModuleDefinitionTest,
-	#superclass : #TestCase,
-	#instVars : [
-		'mooseModel'
-	],
+	#superclass : #DCLConstraintAbstractTest,
 	#category : #'DependencyConstraint-Tests'
 }
 
-{ #category : #running }
-DCLModuleDefinitionTest >> setUp [
-
-	mooseModel := SEMExecutor mooseModelWith: 'JHotDraw 7.3.1'
-
+{ #category : #tests }
+DCLModuleDefinitionTest >> testApplyDefinitionOn [
+	| module entities |
+	module := DCLModuleDefinition new
+		name: 'p123';
+		description: '.*-P[123].*'.
+	entities := module applyDefinitionOn: mooseModel.
 	
+	self assert: entities size equals: 3.
+	self assert: (entities includes: (mooseModel entityNamed: 'Moose-TestResources-KGB-P1FullReferencer')).
+	self assert: (entities includes: (mooseModel entityNamed: 'Moose-TestResources-KGB-P2InteractedReferencerReferee')).
+	self assert: (entities includes: (mooseModel entityNamed: 'Moose-TestResources-KGB-P3InteractedReferencer')).
+
 ]
 
 { #category : #tests }
-DCLModuleDefinitionTest >> testParseDefinitionOn [
-
-	| moduleDefinition classGroup |
-	moduleDefinition := DCLModuleDefinition new
-		moduleName: 'gui';
-		moduleDescription: 'org::jhotdraw::gui*'.
-	classGroup := moduleDefinition parseDefinitionOn: mooseModel.
+DCLModuleDefinitionTest >> testApplyDefinitionOnNone [
+	| module entities |
+	module := DCLModuleDefinition new
+		name: 'empty';
+		description: '.*-whatever-inexistant-.*'.
+	entities := module applyDefinitionOn: mooseModel.
 	
-	self assert: classGroup size = 148.
-	self assert: ( classGroup allClasses allSatisfy: [ :class | class container mooseName beginsWith: 'org::jhotdraw::gui' ]).
-
-	moduleDefinition := DCLModuleDefinition new
-		moduleName: 'gui';
-		moduleDescription: 'org::jhotdraw::gui'.
-	classGroup := moduleDefinition parseDefinitionOn: mooseModel.
-		
-	self assert: classGroup size = 77.
-	self assert: ( classGroup allClasses allSatisfy: [ :class | class container mooseName beginsWith: 'org::jhotdraw::gui' ]).
+	self assert: entities size equals: 0
 ]

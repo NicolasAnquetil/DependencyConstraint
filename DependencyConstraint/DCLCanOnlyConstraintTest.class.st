@@ -1,45 +1,52 @@
 Class {
 	#name : #DCLCanOnlyConstraintTest,
-	#superclass : #TestCase,
-	#instVars : [
-		'mooseModel',
-		'guiClassGroup',
-		'drawClassGroup'
-	],
+	#superclass : #DCLConstraintAbstractTest,
 	#category : #'DependencyConstraint-Tests'
 }
 
-{ #category : #running }
-DCLCanOnlyConstraintTest >> setUp [
-	
-	mooseModel := SEMExecutor mooseModelWith: 'JHotDraw 7.3.1'.
-	
-	guiClassGroup := mooseModel allModelNamespaces select: [ :each | each mooseName beginsWith: 'org::jhotdraw::gui' ].
-	drawClassGroup := mooseModel allModelNamespaces select: [ :each | each mooseName beginsWith: 'org::jhotdraw::draw' ].
-	
-	guiClassGroup := FAMIXClassGroup new
-		addAllWithoutUpdate: ( guiClassGroup 
-			flatCollect: #allClasses;
-			flatCollect: [ :namespace | namespace allClasses flatCollect: #allRecursiveTypes ] ).
-			
-	drawClassGroup := FAMIXClassGroup new
-		addAllWithoutUpdate: ( drawClassGroup 
-			flatCollect: #allClasses;
-			flatCollect: [ :namespace | namespace allClasses flatCollect: #allRecursiveTypes ] ).
+{ #category : #tests }
+DCLCanOnlyConstraintTest >> testValidate [
+
+	"tests if all the violations are accesses from the package gui to any package other than draw"
+
+	| modulesDefinitions constraint1 constraint2 violations |
+	modulesDefinitions := 'p2 = Moose-TestResources-KGB-P2.*
+		 p3 = Moose-TestResources-KGB-P3.*
+		 p5 = Moose-TestResources-KGB-P5.*'.
+
+	constraint1 := (DCLParser new parseConstraints:
+			                modulesDefinitions , String cr
+			                , 'p2 canOnly access p5') first
+		               model: mooseModel;
+		               yourself.
+	constraint2 := (DCLParser new parseConstraints:
+			                modulesDefinitions , String cr
+			                , 'p3 canOnly access p5') first
+		               model: mooseModel;
+		               yourself.
+
+	violations := constraint1 computeResult.
+	self assert: (violations allSatisfy: [ :violation | 
+			 violation usesFamixTrait: FamixTAccess ]).
+	self assert:
+		(violations allSatisfy: [ :violation | violation source typeScope ])
+	"self assert: ( violations noneSatisfy: [ :violation | drawClassGroup includes: violation to typeScope ] )"
 ]
 
 { #category : #tests }
-DCLCanOnlyConstraintTest >> testValidate [
-	"tests if all the violations are accesses from the package gui to any package other than draw"
+DCLCanOnlyConstraintTest >> testValideConstraint [
 
-	| constraint violations  |
-	constraint := ( ( DCLParser new parseConstraints: 
-	'gui = org::jhotdraw::gui*
-	draw = org::jhotdraw::draw*
-	gui canOnly access draw' ) at: 1 ) model: mooseModel.
-	
-	violations := constraint computeResult asCollection.
-	self assert: ( violations allSatisfy: [ :violation | violation isKindOf: FAMIXAccess ] ).
-	self assert: ( violations allSatisfy: [ :violation | guiClassGroup includes: violation from typeScope ] ).
-	self assert: ( violations noneSatisfy: [ :violation | drawClassGroup includes: violation to typeScope ] )
+	| constraint violations |
+	constraint := (DCLParser new parseConstraints:
+		'p3 = Moose-TestResources-KGB-P3.*
+		 p25 = Moose-TestResources-KGB-P[25].*
+		 p3 canOnly access p25') first.
+	constraint model: mooseModel.
+
+	violations := constraint computeResult.
+	self assert: (violations allSatisfy: [ :violation | 
+			 violation usesFamixTrait: FamixTAccess ]).
+	self assert:
+		(violations allSatisfy: [ :violation | violation source typeScope ])
+	"self assert: ( violations noneSatisfy: [ :violation | drawClassGroup includes: violation to typeScope ] )"
 ]

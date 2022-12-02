@@ -18,11 +18,12 @@ moduleDefinitionB
 "
 Class {
 	#name : #DCLConstraint,
-	#superclass : #REPMooseQueryConcern,
+	#superclass : #Object,
 	#instVars : [
 		'moduleDefinitionA',
 		'dependencyType',
-		'moduleDefinitionB'
+		'moduleDefinitionB',
+		'model'
 	],
 	#category : #'DependencyConstraint-Constraints'
 }
@@ -31,13 +32,18 @@ Class {
 DCLConstraint >> collectEntitiesForModule: module [
 
 	| entities |
-	module ifNil: [ ^ FAMIXClassGroup new ].
+	module ifNil: [ ^ MooseGroup new ].
 	
-	entities := self model getEntitiesForComponentTag: module.
-	^ FAMIXClassGroup new
-		addAllWithoutUpdate: (entities collect: #typeScope );
-		addAllWithoutUpdate: ((entities collect: #typeScope ) flatCollect: #allRecursiveTypes );
+	entities := self model entitiesInDCLModule: module.
+	^ MooseGroup new
+		addAll: (entities flatCollect: [ :entity | entity allToScope: FamixTType ] );
 		yourself
+]
+
+{ #category : #running }
+DCLConstraint >> computeResult [
+	"check the constraint on 'self model'"
+	self subclassResponsibility 
 ]
 
 { #category : #accessing }
@@ -50,6 +56,16 @@ DCLConstraint >> dependencyType [
 DCLConstraint >> dependencyType: aFamixAssociation [
 
 	dependencyType := aFamixAssociation
+]
+
+{ #category : #accessing }
+DCLConstraint >> model [
+	^model
+]
+
+{ #category : #accessing }
+DCLConstraint >> model: aModel [
+	model := aModel 
 ]
 
 { #category : #accessing }
@@ -70,10 +86,4 @@ DCLConstraint >> moduleDefinitionB [
 { #category : #accessing }
 DCLConstraint >> moduleDefinitionB: anObject [
 	moduleDefinitionB := anObject
-]
-
-{ #category : #private }
-DCLConstraint >> stakeholder [
-
-	^ REPStakeholder named: 'Dependency Constraint Checker'
 ]

@@ -1,6 +1,9 @@
 Class {
 	#name : #DCLParserTest,
 	#superclass : #TestCase,
+	#instVars : [
+		'parser'
+	],
 	#category : #'DependencyConstraint-Tests'
 }
 
@@ -32,7 +35,7 @@ DCLParserTest >> testIsValidModuleDefinition [
 	self assert: ( DCLParser isValidModuleDefinition: 'moduleA = org.myproject.mypackage' ).
 	self assert: ( DCLParser isValidModuleDefinition: 'moduleB = org.myproject.mypackage.*' ).
 	self assert: ( DCLParser isValidModuleDefinition: 'moduleC = org' ).
-	self assert: ( DCLParser isValidModuleDefinition: 'moduleD = oRg.Mypackage' ).
+	self assert: ( DCLParser isValidModuleDefinition: 'moduleD = oRg.[mM]ypackage' ).
 	
 	self deny: ( DCLParser isValidModuleDefinition: '= org.myproject.mypackage' ).
 	self deny: ( DCLParser isValidModuleDefinition: 'org.mypackage' ).
@@ -53,33 +56,33 @@ DCLParserTest >> testParseConstraint [
 	
 	constraint := parser parseConstraint: 'only moduleX can access moduleY'.
 	self assert: ( constraint isKindOf: DCLOnlyCanConstraint ).
-	self assert: constraint moduleDefinitionA moduleName = 'moduleX'.
-	self assert: constraint dependencyType = FAMIXAccess.
-	self assert: constraint moduleDefinitionB moduleName = 'moduleY'.
+	self assert: constraint moduleDefinitionA name equals: 'moduleX'.
+	self assert: constraint dependencyType equals: FamixTAccess.
+	self assert: constraint moduleDefinitionB name equals: 'moduleY'.
 	
 	constraint := parser parseConstraint: 'moduleX cannot inherit moduleY'.
 	self assert: ( constraint isKindOf: DCLCannotConstraint ).
-	self assert: constraint moduleDefinitionA moduleName = 'moduleX'.
-	self assert: constraint dependencyType = FAMIXInheritance.
-	self assert: constraint moduleDefinitionB moduleName = 'moduleY'.
+	self assert: constraint moduleDefinitionA name equals: 'moduleX'.
+	self assert: constraint dependencyType equals: FamixTInheritance.
+	self assert: constraint moduleDefinitionB name equals: 'moduleY'.
 	
 	constraint := parser parseConstraint: 'moduleX canOnly reference moduleY'.
 	self assert: ( constraint isKindOf: DCLCanOnlyConstraint ).
-	self assert: constraint moduleDefinitionA moduleName = 'moduleX'.
-	self assert: constraint dependencyType = FAMIXReference.
-	self assert: constraint moduleDefinitionB moduleName = 'moduleY'.
+	self assert: constraint moduleDefinitionA name equals: 'moduleX'.
+	self assert: constraint dependencyType equals: FamixTReference.
+	self assert: constraint moduleDefinitionB name equals: 'moduleY'.
 	
 	constraint := parser parseConstraint: 'moduleX must invoke moduleY'.
 	self assert: ( constraint isKindOf: DCLMustConstraint ).
-	self assert: constraint moduleDefinitionA moduleName = 'moduleX'.
-	self assert: constraint dependencyType = FAMIXInvocation.
-	self assert: constraint moduleDefinitionB moduleName = 'moduleY'.
+	self assert: constraint moduleDefinitionA name equals: 'moduleX'.
+	self assert: constraint dependencyType equals: FamixTInvocation.
+	self assert: constraint moduleDefinitionB name equals: 'moduleY'.
 	
 	constraint := parser parseConstraint: 'moduleA must invoke moduleB'.
 	self assert: ( constraint isKindOf: DCLMustConstraint ).
-	self assert: constraint moduleDefinitionA moduleDescription isNil.
-	self assert: constraint dependencyType = FAMIXInvocation.
-	self assert: constraint moduleDefinitionB moduleDescription isNil.
+	self assert: constraint moduleDefinitionA description isNil.
+	self assert: constraint dependencyType equals: FamixTInvocation.
+	self assert: constraint moduleDefinitionB description isNil.
 ]
 
 { #category : #tests }
@@ -87,12 +90,12 @@ DCLParserTest >> testParseModuleDefinition [
 
 	| moduleDefinition |
 	moduleDefinition := parser parseModuleDefinition: 'moduleA = org.myproject.mypackage'.
-	self assert: moduleDefinition moduleName = 'moduleA'.
-	self assert: moduleDefinition moduleDescription = 'org.myproject.mypackage'.
+	self assert: moduleDefinition name equals: 'moduleA'.
+	self assert: moduleDefinition description equals: 'org.myproject.mypackage'.
 	
 	moduleDefinition := parser parseModuleDefinition: 'moduleB = org.myproject.mypackage.*'.
-	self assert: moduleDefinition moduleName = 'moduleB'.
-	self assert: moduleDefinition moduleDescription = 'org.myproject.mypackage.*'.
+	self assert: moduleDefinition name equals: 'moduleB'.
+	self assert: moduleDefinition description equals: 'org.myproject.mypackage.*'.
 ]
 
 { #category : #tests }
@@ -107,17 +110,17 @@ DCLParserTest >> testParseModuleDefinitions [
 	moduleA = *org.myproject.mypackage'.
 	
 	moduleDefinitions := parser parseModuleDefinitions: moduleDefinitionString.
-	self assert: moduleDefinitions size = 3.
+	self assert: moduleDefinitions size equals: 3.
 	
 	moduleDefinition := moduleDefinitions at: 1.
-	self assert: moduleDefinition moduleName = 'moduleA'.
-	self assert: moduleDefinition moduleDescription = 'org.myproject.mypackage'.
+	self assert: moduleDefinition name equals: 'moduleA'.
+	self assert: moduleDefinition description equals: 'org.myproject.mypackage'.
 	
 	moduleDefinition := moduleDefinitions at: 2.
-	self assert: moduleDefinition moduleName = 'moduleB'.
-	self assert: moduleDefinition moduleDescription = 'org.myproject.mypackage.*'.
+	self assert: moduleDefinition name equals: 'moduleB'.
+	self assert: moduleDefinition description equals: 'org.myproject.mypackage.*'.
 	
 	moduleDefinition := moduleDefinitions at: 3.
-	self assert: moduleDefinition moduleName = 'moduleC'.
-	self assert: moduleDefinition moduleDescription = 'org'.
+	self assert: moduleDefinition name equals: 'moduleC'.
+	self assert: moduleDefinition description equals: 'org'.
 ]

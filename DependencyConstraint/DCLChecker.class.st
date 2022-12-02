@@ -1,8 +1,9 @@
 Class {
 	#name : #DCLChecker,
-	#superclass : #REPReport,
+	#superclass : #Object,
 	#instVars : [
-		'constraints'
+		'constraints',
+		'moduleDefinitions'
 	],
 	#category : #'DependencyConstraint-Checker'
 }

@@ -38,8 +38,8 @@ DCLParser >> findModuleNamed: aString [
 	"search for a module definition with a given name. if no one is found, a new definition is created with no description"
 
 	^ moduleDefinitions 
-		detect: [ :moduleDefinition | moduleDefinition moduleName = aString ]
-		ifNone: [ ^ DCLModuleDefinition new moduleName: aString ]
+		detect: [ :moduleDefinition | moduleDefinition name = aString ]
+		ifNone: [ ^ DCLModuleDefinition new name: aString ]
 ]
 
 { #category : #executing }
@@ -94,10 +94,10 @@ DCLParser >> parseConstraints: aString [
 { #category : #executing }
 DCLParser >> parseDependencyType: aString [
 
-	(aString = 'access') ifTrue: [ ^ FAMIXAccess ].
-	(aString = 'inherit') ifTrue: [ ^ FAMIXInheritance ].
-	(aString = 'invoke') ifTrue: [ ^ FAMIXInvocation ].
-	(aString = 'reference') ifTrue: [ ^ FAMIXReference ]
+	(aString = 'access') ifTrue: [ ^ FamixTAccess ].
+	(aString = 'inherit') ifTrue: [ ^ FamixTInheritance ].
+	(aString = 'invoke') ifTrue: [ ^ FamixTInvocation ].
+	(aString = 'reference') ifTrue: [ ^ FamixTReference ]
 ]
 
 { #category : #executing }
@@ -108,8 +108,8 @@ DCLParser >> parseModuleDefinition: aString [
 	moduleDefinitionRegex matches: aString.
 	
 	^ DCLModuleDefinition new
-		moduleName: (moduleDefinitionRegex subexpression: 2);
-		moduleDescription: (moduleDefinitionRegex subexpression: 3);
+		name: (moduleDefinitionRegex subexpression: 2);
+		description: (moduleDefinitionRegex subexpression: 3);
 		yourself.
 		
 		

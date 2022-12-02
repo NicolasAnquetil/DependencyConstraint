@@ -16,49 +16,43 @@ Class {
 	#name : #DCLModuleDefinition,
 	#superclass : #Object,
 	#instVars : [
-		'moduleName',
-		'moduleDescription'
+		'description',
+		'name',
+		'regexp'
 	],
 	#category : #'DependencyConstraint-Parser'
 }
 
-{ #category : #accessing }
-DCLModuleDefinition >> moduleDescription [
-	^ moduleDescription
-]
-
-{ #category : #accessing }
-DCLModuleDefinition >> moduleDescription: anObject [
-	moduleDescription := anObject
-]
-
-{ #category : #accessing }
-DCLModuleDefinition >> moduleName [
-	^ moduleName
-]
-
-{ #category : #accessing }
-DCLModuleDefinition >> moduleName: anObject [
-	moduleName := anObject
-]
-
 { #category : #parsing }
-DCLModuleDefinition >> parseDefinitionOn: aMooseModel [
-	"returns a class group with all the classes in the module definition. if the description is not defined (in the case referencing
-	a module that was not created) then return an empty class group"
+DCLModuleDefinition >> applyDefinitionOn: aMooseGroup [
+	"returns a group with all the entities in the module definition. if the description is not defined (in the case referencing
+	a module that was not created) then return an empty group"
+	description ifNil: [ ^ MooseSpecializedGroup new ].
+	^aMooseGroup entitiesInDCLModule: self
+]
 
-	| namespaceGroup |
-	moduleDescription ifNil: [ ^ FAMIXClassGroup new ].
-	(moduleDescription endsWith: '*') 
-		ifTrue: [ 
-			moduleDescription := moduleDescription copyFrom: 1 to: moduleDescription size - 1.
-			namespaceGroup := ( aMooseModel allModelScopingEntities select: [ :each | each mooseName beginsWith: moduleDescription ] )
-		 ] ifFalse: [ 
-			namespaceGroup := FAMIXNamespaceGroup new.
-			namespaceGroup add: ( ( aMooseModel allModelPackages select: [ :each | each mooseName = moduleDescription ] ) at: 1 ) ].
-		
-	^ FAMIXClassGroup new
-		addAllWithoutUpdate: ( namespaceGroup flatCollect: #allClasses );
-		addAllWithoutUpdate: ((namespaceGroup flatCollect: #allClasses ) flatCollect: #allRecursiveTypes );
-		yourself
+{ #category : #accessing }
+DCLModuleDefinition >> description [
+	^ description
+]
+
+{ #category : #accessing }
+DCLModuleDefinition >> description: aString [
+	description := aString.
+	regexp := aString asRegex
+]
+
+{ #category : #testing }
+DCLModuleDefinition >> descriptionMatches: aMooseEntity [
+	^regexp matches: aMooseEntity name
+]
+
+{ #category : #accessing }
+DCLModuleDefinition >> name [
+	^ name
+]
+
+{ #category : #accessing }
+DCLModuleDefinition >> name: anObject [
+	name := anObject
 ]

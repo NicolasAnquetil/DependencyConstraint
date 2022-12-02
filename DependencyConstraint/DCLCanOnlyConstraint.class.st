@@ -17,13 +17,13 @@ DCLCanOnlyConstraint >> computeResult [
 	 STRATEGY: check if module A depends on other module than moduleB"
 	
 	| classGroupA classGroupB notClassGroupB |
-	classGroupA := self collectEntitiesForModule: moduleDefinitionA.
-	classGroupB := self collectEntitiesForModule: moduleDefinitionB.
+	classGroupA := (self collectEntitiesForModule: moduleDefinitionA) specialize updateTypeAccordingToEntities.
+	classGroupB := (self collectEntitiesForModule: moduleDefinitionB) specialize updateTypeAccordingToEntities.
 	
-	notClassGroupB := FAMIXClassGroup new.
-	notClassGroupB addAllWithoutUpdate: ( self model allModelScopingEntities flatCollect: #allClasses ).
-	notClassGroupB addAllWithoutUpdate: ( notClassGroupB allClasses flatCollect: #allRecursiveTypes ).
-	notClassGroupB removeAllWithoutUpdate: classGroupB allClasses.
+	notClassGroupB := FamixClassGroup new.
+	notClassGroupB addAll: (self model allClasses reject: #isStub).
+	notClassGroupB addAll: ( notClassGroupB allClasses flatCollect: #allRecursiveTypes ).
+	notClassGroupB removeAll: classGroupB allClasses.
 	
 	^ classGroupA queryOutgoingDependencies: notClassGroupB byType: dependencyType
 ]
