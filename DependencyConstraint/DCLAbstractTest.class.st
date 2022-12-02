@@ -1,5 +1,5 @@
 Class {
-	#name : #DCLConstraintAbstractTest,
+	#name : #DCLAbstractTest,
 	#superclass : #TestCase,
 	#instVars : [
 		'mooseModel'
@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #initialization }
-DCLConstraintAbstractTest >> setUp [
+DCLAbstractTest >> setUp [
 	mooseModel := FamixStModel new.
 	MoosePharoImporterTask new
 		importerClass: SmalltalkImporter ;

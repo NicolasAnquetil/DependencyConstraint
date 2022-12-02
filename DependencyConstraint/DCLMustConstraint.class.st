@@ -1,39 +1,21 @@
-"
-A DCLMustConstraint is a dependency constraint that checks:
-
-moduleA must <depend on> module B
-
-The strategy to find violations is to check if there are no dependencies from moduleA to moduleB. If so, a violation is created for the absense of dependencies.
-"
 Class {
 	#name : #DCLMustConstraint,
-	#superclass : #DCLConstraint,
+	#superclass : #DCLAbstractConstraint,
 	#category : #'DependencyConstraint-Constraints'
 }
 
-{ #category : #private }
-DCLMustConstraint >> computeResult [
-	"RULE: moduleA must depend on moduleB
-	 STRATEGY: check if there are no dependencies from moduleA to moduleB"
-	
-	| classGroupA classGroupB |
-	classGroupA := self collectEntitiesForModule: moduleDefinitionA.
-	classGroupB := self collectEntitiesForModule: moduleDefinitionB.
-	
-	^ ( classGroupA queryOutgoingDependencies: classGroupB byType: dependencyType )
-		asCollection ifEmpty: [ MooseGroup new add: ( dependencyType new ) ]
-]
+{ #category : #checking }
+DCLMustConstraint >> check [
+	"checks whether there is a dependency from ModuleA to ModuleB
+	 - compute all outgoing dependencies from moduleA (gives a list of QueryResults)
+	 - for each entity member of moduleB, looks if it is in one of the queryResults (that must be 'raised' at the right scope)"
 
-{ #category : #private }
-DCLMustConstraint >> explanation [
+	| moduleBMembers moduleADependencies |
+	moduleBMembers := moduleB memberEntities.
+	moduleADependencies := moduleA memberEntities collect: [:entityA | (entityA queryOutgoing: association) ].
 
-	^ moduleDefinitionA name asString, ' must ',
-		 dependencyType asString, ' ',
-		 moduleDefinitionB name asString
-]
-
-{ #category : #private }
-DCLMustConstraint >> label [
-
-	^ 'Obligatory dependency to a given target'
+	^(moduleBMembers anySatisfy: [:entityB |
+		moduleADependencies anySatisfy: [ :queryResult | (queryResult atScope: entityB class) includes: entityB ] ])
+		ifTrue: [ #() ]
+		ifFalse: [ moduleADependencies flatCollect: #yourself ]
 ]

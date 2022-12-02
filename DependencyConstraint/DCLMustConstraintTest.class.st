@@ -1,20 +1,37 @@
 Class {
 	#name : #DCLMustConstraintTest,
-	#superclass : #DCLConstraintAbstractTest,
+	#superclass : #DCLAbstractConstraintTest,
 	#category : #'DependencyConstraint-Tests'
 }
 
 { #category : #tests }
-DCLMustConstraintTest >> testValidate [
-	"tests if all the violations are accesses from any package other than gui to the package draw"
+DCLMustConstraintTest >> testCheckNotOK [
+	| violations |
+	violations := (p2p5 must invoke: p3) check.
+	self deny: violations isEmpty
+]
 
-	| constraint violations  |
-	constraint := ( ( DCLParser new parseConstraints: 
-	'gui = org::jhotdraw::gui*
-	draw = org::jhotdraw::draw*
-	gui must access draw' ) at: 1 ) model: mooseModel.
-	
-	violations := constraint computeResult asCollection.
-	self assert: violations size equals: 1.
-	self assert: ( violations allSatisfy: [ :violation | violation from isNil ] ).
+{ #category : #tests }
+DCLMustConstraintTest >> testCheckOK [
+	| violations |
+	violations := (p3 must invoke: p2p5) check.
+	self assert: violations isEmpty
+]
+
+{ #category : #tests }
+DCLMustConstraintTest >> testIsFullySpecified [
+	| constraint |
+	constraint := p2p5 must access: p3.
+
+	self assert: constraint class equals: DCLMustConstraint.
+	self assert: constraint isFullySpecified 
+]
+
+{ #category : #tests }
+DCLMustConstraintTest >> testIsNotFullySpecified [
+	| constraint |
+	constraint := p2p5 must.
+
+	self assert: constraint class equals: DCLMustConstraint.
+	self deny: constraint isFullySpecified 
 ]
