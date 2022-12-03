@@ -1,3 +1,7 @@
+"
+I represent an architectural rule between two architectural modules A and B (DCLModule).
+I specify that moduleA **must** depend on moduleB
+"
 Class {
 	#name : #DCLMustConstraint,
 	#superclass : #DCLAbstractConstraint,
@@ -7,11 +11,8 @@ Class {
 { #category : #checking }
 DCLMustConstraint >> check [
 	"checks whether there is a dependency from ModuleA to ModuleB.
-	If there is sone, returns empty array (no violations)	
-	If there is none, returns all dependencies from moduleA
-
-	 - compute all outgoing dependencies from moduleA (QueryResults)
-	 - for each entity member of moduleB, looks if it is in one of the queryResults (that must be 'raised' at the right scope)"
+	If there is some, returns empty array (no violations)	
+	If there is none, returns all dependencies from moduleA"
 
 	| moduleBMembers moduleADependencies |
 	moduleBMembers := moduleB memberEntities.

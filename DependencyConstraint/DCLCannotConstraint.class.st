@@ -1,3 +1,7 @@
+"
+I represent an architectural rule between two architectural modules A and B (DCLModule).
+I specify that moduleA **cannot** depend on moduleB
+"
 Class {
 	#name : #DCLCannotConstraint,
 	#superclass : #DCLAbstractConstraint,

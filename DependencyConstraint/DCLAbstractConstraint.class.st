@@ -1,7 +1,8 @@
 "
-I represent an architectural rule between two marchitectural modules.
+I represent an architectural rule between two architectural modules (DCLModule).
 
-Rule can be verified by #check.
+Rule can be verified by #check that will reutrn a list of violations if any
+
 dependencies between modules can be:
 - #access:
 - #invoke:
