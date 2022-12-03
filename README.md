@@ -1,26 +1,41 @@
 # DependencyConstraint
-DCL is a language to define dependency constraints between software entities. It includes a checker to look for constraint violations.
+DCL is a language to define dependency constraints between software entities.
+It is intended to define and check architectural constraints.
 
-inspired by DCL, proposed by Ricardo Terra et. al, 2012.
+It is inspired by: Valente, Terra, "A dependency constraint language to manage object-oriented software architectures", *Software Practice and Experience,* 39(12), 1073-1094, August 2009
 
 How to:
-First, we give an example of a constraint in a real project: JHotDraw.
+- Create "Modules"
 ```Smalltalk
-gui = org::jhotdraw::gui*
-draw = org::jhotdraw::draw*
-gui canOnly access draw
+gui := DCLModule new
+  name: 'gui' ;
+  description: '.*\.gui'; "match entities with name ending in '.gui'"
+  model: <a-moose-model> ;
+  yourself.
+draw := DCLModule new
+  name: 'draw' ;
+  description: '.*\.draw'; "match entities with name ending in '.draw'"
+  model: <a-moose-model> ;
+  yourself.
 ```
-
-This constraint defines that the module gui (which comprises all entities defined in the package "gui" and subpackages) can only access attributes of the module draw (defined the same way as module gui). As consequence, all accesses from module gui to any other module than draw will be count as a violation.
-
-The format of a constraint is:
+- Define constraints
 ```Smalltalk
-only <module> can <depend> <module> | <module> <constraint> <depend> <module>
-<constraint> = canOnly | cannot | must
-<depend> = access | invoke | reference | inherit
+constraint := gui canOnly depend: draw.
 ```
-The last step, given a Moose model of the project and the command as a String, is to call the dependency checker:
+- Check that the constraint is verified
+```Smalltalk
+violations := constraint check.
+```
 
-```
-violations := DCLChecker check: aMooseModel with: command
-```
+Possible copnstraints are:
+- `moduleA cannot <a-dependence> moduleB` -- moduleA cannot depend on moduleB
+- `moduleA must <a-dependence> moduleB` -- moduleA must have dependence(s) on moduleB
+- `moduleA canOnly <a-dependence> moduleB` -- moduleA can only depend on moduleB (apart from self dependencies in moduleA)
+- `moduleA onlyCan <a-dependence> moduleB` -- moduleA only, can depend on moduleB (apart from self dependencies in moduleB)
+
+The possible dependencies are:
+- `access:` -- looks for `FamixTAccesse`s between the 2 modules
+- `invoke:` -- looks for `FamixTInvocation`s between the 2 modules
+- `reference:` -- looks for `FamixTReference`s between the 2 modules
+- `inherit:` -- looks for `FamixTInheritance`s between the 2 modules
+- `dependence:` -- looks for `FamixTassociation`s between the 2 modules
