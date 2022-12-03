@@ -1,5 +1,13 @@
 "
-I represent an architectural rle between two marchitectural modules. Here, moduleA must depend on moduleB.
+I represent an architectural rule between two marchitectural modules.
+
+Rule can be verified by #check.
+dependencies between modules can be:
+- #access:
+- #invoke:
+- #reference:
+- #inherit:
+- #depend: (all four preceeding together)
 "
 Class {
 	#name : #DCLAbstractConstraint,

@@ -5,16 +5,49 @@ Class {
 }
 
 { #category : #tests }
-DCLMustConstraintTest >> testCheckNotOK [
+DCLMustConstraintTest >> testCheckNotOKDepend [
 	| violations |
-	violations := (p2p5 must invoke: p3) check.
-	self deny: violations isEmpty
+	violations := (p2p5 must depend: p3) check.
+	self assert: violations size equals: 42
+	"((model entityNamed: 'Moose-TestResources-KGB-P2InteractedReferencerReferee')
+		queryAllOutgoing) size.
+		--> 26
+	 ((model entityNamed: 'Moose-TestResources-KGB-P5FullReferee')
+		queryAllOutgoing) size.
+		--> 16"
 ]
 
 { #category : #tests }
-DCLMustConstraintTest >> testCheckOK [
+DCLMustConstraintTest >> testCheckNotOKInvoke [
+	| violations |
+	violations := (p2p5 must invoke: p3) check.
+	self assert: violations size equals: 22
+	"((model entityNamed: 'Moose-TestResources-KGB-P2InteractedReferencerReferee')
+		queryOutgoing: FamixTInvocation) size.
+		--> 14
+	 ((model entityNamed: 'Moose-TestResources-KGB-P5FullReferee')
+		queryOutgoing: FamixTInvocation) size.
+		--> 8"
+]
+
+{ #category : #tests }
+DCLMustConstraintTest >> testCheckOKDepend [
+	| violations |
+	violations := (p3 must depend: p2p5) check.
+	self assert: violations isEmpty
+]
+
+{ #category : #tests }
+DCLMustConstraintTest >> testCheckOKInvoke [
 	| violations |
 	violations := (p3 must invoke: p2p5) check.
+	self assert: violations isEmpty
+]
+
+{ #category : #tests }
+DCLMustConstraintTest >> testCheckOKReference [
+	| violations |
+	violations := (p3 must reference: p2p5) check.
 	self assert: violations isEmpty
 ]
 
