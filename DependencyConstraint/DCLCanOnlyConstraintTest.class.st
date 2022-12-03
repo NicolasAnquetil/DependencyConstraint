@@ -4,12 +4,6 @@ Class {
 	#category : #'DependencyConstraint-Tests'
 }
 
-{ #category : #testing }
-DCLCanOnlyConstraintTest >> expectedFailures [
-
-	^ super expectedFailures, #(testCheckOKInvoke)
-]
-
 { #category : #tests }
 DCLCanOnlyConstraintTest >> testCheckNotOKInvoke [
 	| violations |
@@ -21,10 +15,9 @@ DCLCanOnlyConstraintTest >> testCheckNotOKInvoke [
 ]
 
 { #category : #tests }
-DCLCanOnlyConstraintTest >> testCheckOKInvoke [
+DCLCanOnlyConstraintTest >> testCheckOKReference [
 	| violations |
-	self flag: 'expected failure because invocations on "super" lack #candidates (issue Famix#498)'.
-	violations := (p4 canOnly invoke: p4) check.
+	violations := (p3 canOnly reference: p2p5) check.
 	self assert: violations isEmpty
 ]
 

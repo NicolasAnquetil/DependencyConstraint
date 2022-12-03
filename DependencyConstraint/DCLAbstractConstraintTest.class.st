@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'p2p5',
 		'p3',
-		'p4'
+		'p13',
+		'p14'
 	],
 	#category : #'DependencyConstraint-Tests'
 }
@@ -23,9 +24,14 @@ DCLAbstractConstraintTest >> setUp [
 		description: '.*-P3.*' ;
 		model: mooseModel ;
 		yourself.
-	p4 := DCLModule new
-		name: 'p4' ;
-		description: '.*-P4.*' ;
+	p13 := DCLModule new
+		name: 'p13' ;
+		description: '.*-P13.*' ;
+		model: mooseModel ;
+		yourself.
+	p14 := DCLModule new
+		name: 'p14' ;
+		description: '.*-P14.*' ;
 		model: mooseModel ;
 		yourself.
 

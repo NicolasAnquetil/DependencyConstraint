@@ -118,3 +118,8 @@ DCLModule >> name: anObject [
 
 	name := anObject
 ]
+
+{ #category : #constraint }
+DCLModule >> onlyCan [
+	^self constraint: DCLOnlyCanConstraint
+]

@@ -53,7 +53,7 @@ DCLModuleTest >> testMemberEntities [
 		model: mooseModel ;
 		yourself.
 	
-	self assert: module memberEntities size equals: 23.
+	self assert: module memberEntities size equals: 24.
 
 ]
 

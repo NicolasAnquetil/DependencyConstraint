@@ -16,9 +16,9 @@ DCLAbstractTest >> setUp [
 		addFromPackageNamed: #'Moose-TestResources-KGB-P1FullReferencer' ;
 		addFromPackageNamed: #'Moose-TestResources-KGB-P2InteractedReferencerReferee' ;
 		addFromPackageNamed: #'Moose-TestResources-KGB-P3InteractedReferencer' ;
-		addFromPackageNamed: #'Moose-TestResources-KGB-P4FullInteracted' ;
 		addFromPackageNamed: #'Moose-TestResources-KGB-P5FullReferee' ;
-		addFromPackageNamed: #'Moose-TestResources-KGB-P6InteractedReferee' ;
+		addFromPackageNamed: #'Moose-TestResources-KGB-P13FullReferencer' ;
+		addFromPackageNamed: #'Moose-TestResources-KGB-P14FullReferee' ;
 		run
 		
 	"P1 references P2, P5, P6
