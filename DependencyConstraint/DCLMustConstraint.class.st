@@ -14,13 +14,12 @@ DCLMustConstraint >> check [
 	If there is some, returns empty array (no violations)	
 	If there is none, returns all dependencies from moduleA"
 
-	| moduleBMembers moduleADependencies |
-	moduleBMembers := moduleB memberEntities.
+	| moduleADependencies |
 	moduleADependencies := Set new.
 
 	moduleA memberEntities do: [ :entityA || queryResultA |
 		queryResultA := entityA queryOutgoing: association.
-		moduleBMembers do: [:entityB |
+		moduleB memberEntities do: [:entityB |
 			(queryResultA within: entityB)
 				ifNotEmpty: [ ^#() ] ].
 		moduleADependencies addAll: queryResultA
