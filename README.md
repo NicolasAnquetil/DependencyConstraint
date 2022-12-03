@@ -27,15 +27,15 @@ constraint := gui canOnly depend: draw.
 violations := constraint check.
 ```
 
-Possible copnstraints are:
+Possible constraints are:
 - `moduleA cannot <a-dependence> moduleB` -- moduleA cannot depend on moduleB
 - `moduleA must <a-dependence> moduleB` -- moduleA must have dependence(s) on moduleB
 - `moduleA canOnly <a-dependence> moduleB` -- moduleA can only depend on moduleB (apart from self dependencies in moduleA)
 - `moduleA onlyCan <a-dependence> moduleB` -- moduleA only, can depend on moduleB (apart from self dependencies in moduleB)
 
 The possible dependencies are:
-- `access:` -- looks for `FamixTAccesse`s between the 2 modules
-- `invoke:` -- looks for `FamixTInvocation`s between the 2 modules
-- `reference:` -- looks for `FamixTReference`s between the 2 modules
-- `inherit:` -- looks for `FamixTInheritance`s between the 2 modules
-- `dependence:` -- looks for `FamixTassociation`s between the 2 modules
+- `access:` -- looks for `FamixTAccesse` between the 2 modules
+- `invoke:` -- looks for `FamixTInvocation` between the 2 modules
+- `reference:` -- looks for `FamixTReference` between the 2 modules
+- `inherit:` -- looks for `FamixTInheritance` between the 2 modules
+- `dependence:` -- looks for `FamixTassociation` between the 2 modules
