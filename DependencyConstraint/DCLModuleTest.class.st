@@ -1,11 +1,30 @@
 Class {
-	#name : #DCLNewModuleTest,
+	#name : #DCLModuleTest,
 	#superclass : #DCLAbstractTest,
 	#category : #'DependencyConstraint-Tests'
 }
 
 { #category : #tests }
-DCLNewModuleTest >> testDescriptionMatches [
+DCLModuleTest >> testAsTag [
+	| module tag |
+	module := DCLModule new
+		name: 'module-full' ;
+		description: '.*Full.*' ;
+		model: mooseModel ;
+		yourself.
+
+	self assert: mooseModel allTags isEmpty.
+	self deny: module memberEntities first isTagged.
+
+	tag := module asTag.
+
+	self assert: mooseModel allTags size equals: 1.
+	self assert: module memberEntities first isTagged.
+
+]
+
+{ #category : #tests }
+DCLModuleTest >> testDescriptionMatches [
 	| module |
 	module := DCLModule new
 		name: 'p123';
@@ -17,7 +36,7 @@ DCLNewModuleTest >> testDescriptionMatches [
 ]
 
 { #category : #tests }
-DCLNewModuleTest >> testIsFullySpecified [
+DCLModuleTest >> testIsFullySpecified [
 	self deny:   (DCLModule new name: 'mod'; yourself) isFullySpecified.
 	self deny:   (DCLModule new name: 'mod'; description: '.*abc.*'; yourself) isFullySpecified.
 	self assert: (DCLModule new name: 'mod'; description: '.*abc.*'; model: #() ; yourself) isFullySpecified.
@@ -26,7 +45,7 @@ DCLNewModuleTest >> testIsFullySpecified [
 ]
 
 { #category : #tests }
-DCLNewModuleTest >> testMemberEntities [
+DCLModuleTest >> testMemberEntities [
 	| module |
 	module := DCLModule new
 		name: 'module-full' ;
@@ -39,7 +58,7 @@ DCLNewModuleTest >> testMemberEntities [
 ]
 
 { #category : #tests }
-DCLNewModuleTest >> testNoMemberEntities [
+DCLModuleTest >> testNoMemberEntities [
 	| module |
 	module := DCLModule new
 		name: 'module-full' ;
