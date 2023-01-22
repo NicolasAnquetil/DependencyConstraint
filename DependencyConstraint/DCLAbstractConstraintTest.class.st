@@ -14,22 +14,22 @@ Class {
 DCLAbstractConstraintTest >> setUp [
 	super setUp.
 
-	p2p5 := DCLModule new
+	p2p5 := DCLModuleOnName new
 		name: 'p2p5' ;
 		description: '.*-P[25].*' ;
 		model: mooseModel ;
 		yourself.
-	p3 := DCLModule new
+	p3 := DCLModuleOnName new
 		name: 'p3' ;
 		description: '.*-P3.*' ;
 		model: mooseModel ;
 		yourself.
-	p13 := DCLModule new
+	p13 := DCLModuleOnName new
 		name: 'p13' ;
 		description: '.*-P13.*' ;
 		model: mooseModel ;
 		yourself.
-	p14 := DCLModule new
+	p14 := DCLModuleOnName new
 		name: 'p14' ;
 		description: '.*-P14.*' ;
 		model: mooseModel ;

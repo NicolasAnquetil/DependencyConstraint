@@ -1,13 +1,13 @@
 Class {
-	#name : #DCLModuleTest,
+	#name : #DCLModuleOnNameTest,
 	#superclass : #DCLAbstractTest,
 	#category : #'DependencyConstraint-Tests'
 }
 
 { #category : #tests }
-DCLModuleTest >> testAsTag [
+DCLModuleOnNameTest >> testAsTag [
 	| module tag |
-	module := DCLModule new
+	module := DCLModuleOnName new
 		name: 'module-full' ;
 		description: '.*Full.*' ;
 		model: mooseModel ;
@@ -24,9 +24,9 @@ DCLModuleTest >> testAsTag [
 ]
 
 { #category : #tests }
-DCLModuleTest >> testDescriptionMatches [
+DCLModuleOnNameTest >> testDescriptionMatches [
 	| module |
-	module := DCLModule new
+	module := DCLModuleOnName new
 		name: 'p123';
 		description: '.*abc.*';
 		yourself.
@@ -36,18 +36,18 @@ DCLModuleTest >> testDescriptionMatches [
 ]
 
 { #category : #tests }
-DCLModuleTest >> testIsFullySpecified [
-	self deny:   (DCLModule new name: 'mod'; yourself) isFullySpecified.
-	self deny:   (DCLModule new name: 'mod'; description: '.*abc.*'; yourself) isFullySpecified.
-	self assert: (DCLModule new name: 'mod'; description: '.*abc.*'; model: #() ; yourself) isFullySpecified.
-	self assert: (DCLModule new name: 'mod'; description: '.*abc.*'; model: mooseModel ; yourself) isFullySpecified.
+DCLModuleOnNameTest >> testIsFullySpecified [
+	self deny:   (DCLModuleOnName new name: 'mod'; yourself) isFullySpecified.
+	self deny:   (DCLModuleOnName new name: 'mod'; description: '.*abc.*'; yourself) isFullySpecified.
+	self assert: (DCLModuleOnName new name: 'mod'; description: '.*abc.*'; model: #() ; yourself) isFullySpecified.
+	self assert: (DCLModuleOnName new name: 'mod'; description: '.*abc.*'; model: mooseModel ; yourself) isFullySpecified.
 
 ]
 
 { #category : #tests }
-DCLModuleTest >> testMemberEntities [
+DCLModuleOnNameTest >> testMemberEntities [
 	| module |
-	module := DCLModule new
+	module := DCLModuleOnName new
 		name: 'module-full' ;
 		description: '.*Full.*' ;
 		model: mooseModel ;
@@ -58,9 +58,9 @@ DCLModuleTest >> testMemberEntities [
 ]
 
 { #category : #tests }
-DCLModuleTest >> testNoMemberEntities [
+DCLModuleOnNameTest >> testNoMemberEntities [
 	| module |
-	module := DCLModule new
+	module := DCLModuleOnName new
 		name: 'module-full' ;
 		description: '.*whatever-inexistant.*' ;
 		model: mooseModel ;

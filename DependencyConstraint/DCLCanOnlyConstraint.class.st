@@ -14,15 +14,16 @@ DCLCanOnlyConstraint >> check [
 	If yes, returns empty array (no violations)	
 	If there are other dependencies, return them"
 
-	| dependenciesFound |
-	dependenciesFound := Set new.
+	| violations |
+	violations := Set new.
 
 	moduleA memberEntities do: [ :entityA || queryResultA |
-		queryResultA := (entityA queryOutgoing: association) withoutSelfLoops.
+		queryResultA := (self outgoingDependenciesFor: entityA in:  moduleA)
+			withoutSelfLoops.
 		moduleB memberEntities do: [:entityB |
 			queryResultA := queryResultA outOf: entityB ].
-		dependenciesFound addAll: queryResultA.
+		violations addAll: queryResultA.
 	].
-	^dependenciesFound
+	^violations
 
 ]

@@ -15,15 +15,15 @@ DCLCannotConstraint >> check [
 	If there is none, returns empty array (no violations)	
 	If there is some, returns them"
 
-	| dependenciesFound |
-	dependenciesFound := Set new.
+	| violations |
+	violations := Set new.
 
 	moduleA memberEntities do: [ :entityA || queryResultA |
-		queryResultA := entityA queryOutgoing: association.
+		queryResultA := self outgoingDependenciesFor: entityA in:  moduleA.
 		(moduleB memberEntities do: [ :entityB | 
 			(queryResultA within: entityB)
-				ifNotEmpty: [ :dependenciesToB | dependenciesFound addAll: dependenciesToB ]
+				ifNotEmpty: [ :dependenciesToB | violations addAll: dependenciesToB ]
 		])
 	].
-	^ dependenciesFound
+	^ violations
 ]

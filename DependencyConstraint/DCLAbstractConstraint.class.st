@@ -21,7 +21,7 @@ Class {
 	#category : #'DependencyConstraint-Constraints'
 }
 
-{ #category : #accessing }
+{ #category : #DSL }
 DCLAbstractConstraint >> access: aDCLModule [
 	association := FamixTAccess.
 	moduleB := aDCLModule
@@ -44,19 +44,24 @@ DCLAbstractConstraint >> check [
 	self subclassResponsibility 
 ]
 
-{ #category : #accessing }
+{ #category : #DSL }
 DCLAbstractConstraint >> depend: aDCLModule [
 	association := FamixTAssociation.
 	moduleB := aDCLModule
 ]
 
 { #category : #accessing }
+DCLAbstractConstraint >> incomingDependenciesFor: entity in: module [
+	^module incomingDependencies: association for: entity
+]
+
+{ #category : #DSL }
 DCLAbstractConstraint >> inherit: aDCLModule [
 	association := FamixTInheritance.
 	moduleB := aDCLModule
 ]
 
-{ #category : #accessing }
+{ #category : #DSL }
 DCLAbstractConstraint >> invoke: aDCLModule [
 	association := FamixTInvocation.
 	moduleB := aDCLModule
@@ -99,7 +104,17 @@ DCLAbstractConstraint >> moduleB: anObject [
 ]
 
 { #category : #accessing }
+DCLAbstractConstraint >> outgoingDependenciesFor: entity in: module [
+	^module outgoingDependencies: association for: entity
+]
+
+{ #category : #DSL }
 DCLAbstractConstraint >> reference: aDCLModule [
 	association := FamixTReference.
 	moduleB := aDCLModule
+]
+
+{ #category : #accessing }
+DCLAbstractConstraint >> violations [
+	^self check
 ]
