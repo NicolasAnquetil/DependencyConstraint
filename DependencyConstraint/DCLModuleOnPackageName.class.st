@@ -1,30 +1,13 @@
+"
+A DCLModule where member entities are computed from a regexp on the name of their parent packages
+"
 Class {
 	#name : #DCLModuleOnPackageName,
-	#superclass : #DCLAbstractModule,
-	#instVars : [
-		'description',
-		'packageName'
-	],
+	#superclass : #DCLModuleOnName,
 	#category : #'DependencyConstraint-Constraints'
 }
 
-{ #category : #testing }
-DCLModuleOnPackageName >> isFullySpecified [
-	^super isFullySpecified and:
-	[ packageName isString ]
-]
-
-{ #category : #accessing }
-DCLModuleOnPackageName >> packageName [
-	^packageName
-]
-
-{ #category : #accessing }
-DCLModuleOnPackageName >> packageName: aString [
-	packageName := aString
-]
-
 { #category : #accessing }
 DCLModuleOnPackageName >> privateComputeMembers [
-	^model allPackages select: [ :p | p name = packageName ]
+	^model allPackages select: [ :pckg | self descriptionMatches: pckg ]
 ]

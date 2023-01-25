@@ -1,3 +1,6 @@
+"
+A DCLModule where member entities are computed from a regexp on their name (the `description` of the module)
+"
 Class {
 	#name : #DCLModuleOnName,
 	#superclass : #DCLAbstractModule,

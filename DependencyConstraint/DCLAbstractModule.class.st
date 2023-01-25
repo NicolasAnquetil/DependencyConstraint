@@ -15,7 +15,7 @@ Class {
 		'regexp',
 		'model',
 		'cache',
-		'members'
+		'memberEntities'
 	],
 	#category : #'DependencyConstraint-Constraints'
 }
@@ -70,7 +70,7 @@ DCLAbstractModule >> isFullySpecified [
 DCLAbstractModule >> memberEntities [
 	self isFullySpecified
 		ifFalse: [ ^ MooseSpecializedGroup new ].
-	^members ifNotNil: [ members ] ifNil: [ members := self privateComputeMembers ]
+	^memberEntities ifNotNil: [ memberEntities ] ifNil: [ memberEntities := self privateComputeMembers ]
 ]
 
 { #category : #accessing }
@@ -130,5 +130,5 @@ DCLAbstractModule >> privateComputeMembers [
 { #category : #initialization }
 DCLAbstractModule >> resetCaches [
 	cache := Dictionary new.
-	members := nil
+	memberEntities := nil
 ]
